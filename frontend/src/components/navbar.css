@@ -1,0 +1,110 @@
+/* Color Palette Variables */
+:root {
+  --ink: #1a1a1a;
+  --paper: #fcfcfc;
+  --border: rgba(26, 26, 26, 0.1);
+  --accent: #6366f1; /* Indigo */
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: white;
+  border-bottom: 1px solid var(--border);
+  padding: 0 1.5rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-container {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo Section */
+.nav-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.nav-logo-group:hover {
+  opacity: 0.8;
+}
+
+.nav-logo-icon {
+  width: 32px;
+  height: 32px;
+  background-color: var(--ink);
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: 2px;
+}
+
+.nav-brand-name {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+/* Links Section */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(26, 26, 26, 0.6);
+  transition: color 0.2s ease;
+}
+
+.nav-item:hover {
+  color: var(--ink);
+}
+
+.nav-profile {
+  color: var(--ink);
+}
+
+.nav-profile:hover {
+  color: var(--accent);
+}
+
+.nav-divider {
+  height: 16px;
+  width: 1px;
+  background-color: var(--border);
+  margin: 0 0.5rem;
+}
+
+/* Responsive Utilities */
+@media (max-width: 640px) {
+  .hide-mobile {
+    display: none;
+  }
+  
+  .nav-links {
+    gap: 1rem;
+  }
+}
