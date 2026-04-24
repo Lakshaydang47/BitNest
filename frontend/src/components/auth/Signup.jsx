@@ -16,7 +16,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:3002/signup", {
+      const res = await axios.post("https://backend-szu2.onrender.com/signup", {
         email,
         password,
         username,

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { PlusSquare, UserCircle, LayoutDashboard } from "lucide-react";
+import { PlusSquare, UserCircle, LayoutDashboard, Star, Terminal } from "lucide-react";
 import "./navbar.css";
 
 const Navbar = () => {
@@ -24,9 +24,19 @@ const Navbar = () => {
             <span>Documentation</span>
           </Link>
 
+          <Link to="/cli-guide" className="nav-item hide-mobile">
+            <Terminal size={18} />
+            <span>How to Install in your System</span>
+          </Link>
+
           <Link to="/repo/create" className="nav-item">
             <PlusSquare size={18} />
-            <span className="hide-mobile">Create Repository</span>
+            <span className="hide-mobile">Create</span>
+          </Link>
+
+          <Link to="/starred" className="nav-item">
+            <Star size={18} />
+            <span className="hide-mobile">Starred</span>
           </Link>
 
           <div className="nav-divider hide-mobile"></div>

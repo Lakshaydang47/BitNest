@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { 
-  User, Mail, BookMarked, Users, Star, 
+import {
+  User, Mail, BookMarked, Users, Star,
   LogOut, Edit2, Trash2, Check, X, AlertTriangle, ShieldAlert
 } from 'lucide-react';
 import axios from 'axios';
@@ -15,7 +15,7 @@ export default function Profile() {
 
   // State
   const [userData, setUserData] = useState(null);
-  const [repoCount, setRepoCount] = useState(0); // Live repository count
+  const [repoCount, setRepoCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
@@ -28,6 +28,10 @@ export default function Profile() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteInput, setDeleteInput] = useState("");
 
+  // Star/Follow State
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
+
   // Fetch User Profile & Repo Count
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -38,15 +42,23 @@ export default function Profile() {
 
       try {
         setLoading(true);
-        
+
         // Fetch User Profile
-        const userRes = await axios.get(`http://localhost:3002/userProfile/${userId}`);
-        setUserData(userRes.data);
-        setEditForm({ username: userRes.data.username, email: userRes.data.email });
+        const userRes = await axios.get(`https://backend-szu2.onrender.com/userProfile/${userId}`);
+        const user = userRes.data;
+        setUserData(user);
+        setEditForm({ username: user.username, email: user.email });
 
         // Fetch Live Repository Count
-        const repoRes = await axios.get(`http://localhost:3002/repo/user/${userId}`);
+        const repoRes = await axios.get(`https://backend-szu2.onrender.com/repo/user/${userId}`);
         setRepoCount(repoRes.data.length);
+
+        // Check if current user is following this profile
+        const currentId = localStorage.getItem("userId");
+        if (currentId && currentId !== userId) {
+          const meRes = await axios.get(`https://backend-szu2.onrender.com/userProfile/${currentId}`);
+          setIsFollowing(meRes.data.followedUsers?.some(id => id.toString() == userId.toString()));
+        }
 
       } catch (err) {
         console.error("Error fetching profile:", err);
@@ -59,12 +71,33 @@ export default function Profile() {
     fetchProfileData();
   }, [userId, navigate]);
 
+  const handleFollow = async () => {
+    const currentId = localStorage.getItem("userId");
+    try {
+      setFollowLoading(true);
+      const endpoint = isFollowing ? "unfollow" : "follow";
+      await axios.post(`https://backend-szu2.onrender.com/${endpoint}`, { userId: currentId, targetId: userId });
+      setIsFollowing(!isFollowing);
+      // Update follow count locally
+      setUserData(prev => ({
+        ...prev,
+        followers: isFollowing
+          ? prev.followers.filter(id => id !== currentId)
+          : [...(prev.followers || []), currentId]
+      }));
+    } catch (e) {
+      alert("Failed to update follow status.");
+    } finally {
+      setFollowLoading(false);
+    }
+  };
+
   // Handle Profile Update
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
       setActionLoading(true);
-      await axios.put(`http://localhost:3002/updateProfile/${userId}`, editForm);
+      await axios.put(`https://backend-szu2.onrender.com/updateProfile/${userId}`, editForm);
       setUserData(prev => ({ ...prev, username: editForm.username, email: editForm.email }));
       setIsEditing(false);
     } catch (err) {
@@ -81,7 +114,7 @@ export default function Profile() {
 
     try {
       setActionLoading(true);
-      await axios.delete(`http://localhost:3002/deleteProfile/${userId}`);
+      await axios.delete(`https://backend-szu2.onrender.com/deleteProfile/${userId}`);
       localStorage.clear();
       navigate('/login');
     } catch (err) {
@@ -143,10 +176,10 @@ export default function Profile() {
               <h3 className="text-lg font-bold text-slate-900">Delete Account</h3>
             </div>
             <p className="text-sm text-slate-600 mb-5 leading-relaxed">
-              This action is <span className="font-bold text-red-600">permanent and cannot be undone</span>. 
+              This action is <span className="font-bold text-red-600">permanent and cannot be undone</span>.
               All your repositories, stars, and data will be erased.
             </p>
-            
+
             <div className="mb-6">
               <label className="block text-sm font-semibold text-slate-700 mb-2">
                 Type <span className="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-red-600 select-all">{userData?.username}</span> to confirm.
@@ -160,7 +193,7 @@ export default function Profile() {
                 autoFocus
               />
             </div>
-            
+
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => { setShowDeleteModal(false); setDeleteInput(""); }}
@@ -183,13 +216,13 @@ export default function Profile() {
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        
+
         {/* Profile Header Card */}
         <div className="bg-white rounded-2xl shadow-sm ring-1 ring-slate-900/5 p-8 mb-8 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-indigo-500 to-purple-600 opacity-10"></div>
-          
+
           <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            
+
             <div className="flex items-center gap-6 w-full">
               {/* Avatar Placeholder */}
               <div className="w-24 h-24 rounded-full bg-indigo-100 border-4 border-white shadow-md flex items-center justify-center text-indigo-600 text-4xl font-bold uppercase shrink-0">
@@ -242,22 +275,33 @@ export default function Profile() {
             </div>
 
             {/* Profile Actions */}
-            {isOwnProfile && !isEditing && (
-              <div className="flex sm:flex-col gap-3 shrink-0">
-                <button 
-                  onClick={() => setIsEditing(true)}
-                  className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 hover:text-indigo-600 transition-colors shadow-sm w-full sm:w-auto"
+            <div className="flex sm:flex-col gap-3 shrink-0">
+              {!isOwnProfile && (
+                <button
+                  onClick={handleFollow}
+                  disabled={followLoading}
+                  className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm w-full sm:w-auto ${isFollowing ? 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
                 >
-                  <Edit2 size={16} /> Edit Profile
+                  {followLoading ? '...' : isFollowing ? 'Unfollow' : 'Follow'}
                 </button>
-                <button 
-                  onClick={handleLogout}
-                  className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors shadow-sm w-full sm:w-auto"
-                >
-                  <LogOut size={16} /> Sign Out
-                </button>
-              </div>
-            )}
+              )}
+              {isOwnProfile && !isEditing && (
+                <>
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 hover:text-indigo-600 transition-colors shadow-sm w-full sm:w-auto"
+                  >
+                    <Edit2 size={16} /> Edit Profile
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors shadow-sm w-full sm:w-auto"
+                  >
+                    <LogOut size={16} /> Sign Out
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
@@ -285,6 +329,16 @@ export default function Profile() {
 
           <div className="bg-white rounded-xl shadow-sm ring-1 ring-slate-900/5 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
             <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+              <Users size={24} />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-500 uppercase tracking-wide">Followers</p>
+              <h3 className="text-2xl font-bold text-slate-900">{userData?.followers?.length || 0}</h3>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm ring-1 ring-slate-900/5 p-6 flex items-center gap-4 hover:shadow-md transition-shadow">
+            <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
               <Users size={24} />
             </div>
             <div>
@@ -316,7 +370,7 @@ export default function Profile() {
                   Once you delete your account, there is no going back. Please be certain.
                 </p>
               </div>
-              <button 
+              <button
                 onClick={() => setShowDeleteModal(true)}
                 className="shrink-0 px-4 py-2 border border-red-200 text-red-600 bg-white hover:bg-red-50 hover:border-red-300 rounded-lg text-sm font-medium transition-all flex items-center gap-2"
               >

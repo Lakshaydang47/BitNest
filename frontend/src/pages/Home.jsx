@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import { features } from '../data/features';
 
 export default function Home() {
@@ -16,12 +16,15 @@ export default function Home() {
           <p className="text-xl md:text-2xl text-ink/60 max-w-2xl font-light leading-relaxed mb-12">
             Bitenst combines robust version control with automatic documentation, commit summaries, and meeting transcriptions. Built for professional engineering teams.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4">
             <Link to="/workflow" className="bg-ink text-paper px-8 py-4 text-sm font-medium hover:bg-ink/80 transition-colors text-center">
               Explore Workflow
             </Link>
-            <a href="#modules" className="border border-ink/20 px-8 py-4 text-sm font-medium hover:bg-ink/5 transition-colors text-center">
+            <Link to="/cli-guide" className="border border-ink text-ink px-8 py-4 text-sm font-medium hover:bg-ink hover:text-paper transition-all text-center">
+              How to Install
+            </Link>
+            <a href="#modules" className="border border-ink/10 px-8 py-4 text-sm font-medium hover:bg-ink/5 transition-colors text-center">
               View Modules
             </a>
           </div>
@@ -41,12 +44,60 @@ export default function Home() {
               <p className="font-mono text-xs text-ink/50 uppercase tracking-widest">Faster Docs</p>
             </div>
             <div className="p-8 text-center">
-              <p className="text-4xl font-light text-ink mb-2">24/7</p>
-              <p className="font-mono text-xs text-ink/50 uppercase tracking-widest">AI Assistance</p>
+              <p className="text-4xl font-light text-ink mb-2">6</p>
+              <p className="font-mono text-xs text-ink/50 uppercase tracking-widest">Simplest CLi Commands</p>
             </div>
             <div className="p-8 text-center">
               <p className="text-4xl font-light text-ink mb-2">Zero</p>
-              <p className="font-mono text-xs text-ink/50 uppercase tracking-widest">Lost Meetings</p>
+              <p className="font-mono text-xs text-ink/50 uppercase tracking-widest">Lost Files</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* VS Code Integration */}
+      <section className="py-32 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-indigo-600 rounded-[3rem] p-12 md:p-20 text-paper relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-white/5 skew-x-[-20deg] translate-x-20"></div>
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-5xl font-medium tracking-tighter mb-8 leading-tight">
+                Seamless Integration with VS Code.
+              </h2>
+              <div className="space-y-6 text-paper/80 font-light text-lg">
+                <p>
+                  Our CLI is designed to work perfectly within the VS Code integrated terminal. No extra extensions required.
+                </p>
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <Check className="mt-1 flex-shrink-0" size={20} />
+                    <span>Real-time feedback directly in your editor's terminal.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="mt-1 flex-shrink-0" size={20} />
+                    <span>Automatic directory tracking—no need to switch contexts.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="mt-1 flex-shrink-0" size={20} />
+                    <span>Securely handle sensitive credentials via workspace .env.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="bg-slate-900 rounded-2xl border border-white/10 p-6 shadow-2xl">
+              <div className="flex gap-2 mb-6">
+                <div className="w-3 h-3 rounded-full bg-red-400/50"></div>
+                <div className="w-3 h-3 rounded-full bg-amber-400/50"></div>
+                <div className="w-3 h-3 rounded-full bg-emerald-400/50"></div>
+              </div>
+              <div className="font-mono text-sm md:text-base space-y-2">
+                <p className="text-emerald-400">$ bitnest commit "Fixed auth bug"</p>
+                <p className="text-white/60">[main a1b2c3d] Fixed auth bug</p>
+                <p className="text-white/60"> 2 files changed, 14 insertions(+)</p>
+                <p className="text-emerald-400 mt-4">$ bitnest push 65a2b...90c</p>
+                <p className="text-white/60">Uploading objects: 100% (3/3), done.</p>
+                <p className="text-emerald-400">Successfully pushed to cloud.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -65,7 +116,7 @@ export default function Home() {
 
         <div className="border-t border-ink/10">
           {features.map((feature, index) => (
-            <Link 
+            <Link
               key={feature.id}
               to={`/features/${feature.id}`}
               className="group block border-b border-ink/10 py-8 hover:bg-ink/5 transition-colors"

@@ -22,7 +22,7 @@ export default function Layout() {
             </Link>
 
             <nav className="hidden md:flex items-center gap-8">
-              <Link to="/cli-guide" className="text-sm font-medium text-ink/60 hover:text-ink transition-colors">How to Install</Link>
+              <Link to="/" className="text-sm font-medium text-ink/60 hover:text-ink transition-colors">Index</Link>
               <Link to="/workflow" className="text-sm font-medium text-ink/60 hover:text-ink transition-colors">Workflow</Link>
               <div className="relative group">
                 <button className="text-sm font-medium text-ink/60 hover:text-ink transition-colors py-8 flex items-center gap-1">
@@ -45,12 +45,12 @@ export default function Layout() {
                 Documentation <ArrowUpRight size={14} />
               </Link>
               <div className="h-4 w-px bg-ink/20 mx-2"></div>
-              <Link to="/auth" className="bg-ink text-paper px-6 py-2.5 text-sm font-medium hover:bg-ink/90 transition-colors rounded-sm shadow-sm">
+              <a href="#" className="bg-ink text-paper px-6 py-2.5 text-sm font-medium hover:bg-ink/90 transition-colors rounded-sm shadow-sm">
                 Initialize
-              </Link>
+              </a>
             </nav>
 
-            <button
+            <button 
               className="md:hidden p-2 text-ink"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
@@ -61,12 +61,12 @@ export default function Layout() {
 
         {isMobileMenuOpen && (
           <div className="md:hidden bg-paper border-b border-ink/10 px-4 py-8 flex flex-col gap-6 h-screen">
-            <Link to="/cli-guide" className="text-2xl font-medium text-ink">How to Install</Link>
+            <Link to="/" className="text-2xl font-medium text-ink">Index</Link>
             <Link to="/workflow" className="text-2xl font-medium text-ink">Workflow</Link>
             <Link to="/features/docs" className="text-2xl font-medium text-ink flex items-center gap-2">Documentation <ArrowUpRight size={20} /></Link>
-
+            
             <div className="h-px bg-ink/10 my-4" />
-
+            
             <p className="font-mono text-xs text-ink/40 uppercase tracking-widest">Modules</p>
             <div className="grid grid-cols-2 gap-4">
               <Link to="/features/auth" className="text-ink/80">Authentication</Link>
@@ -111,17 +111,17 @@ export default function Layout() {
                 </a>
               </div>
             </div>
-
+            
             <div className="lg:col-start-4">
               <h4 className="font-mono text-xs text-ink/40 uppercase tracking-widest mb-8">Product</h4>
               <ul className="space-y-4 text-base text-ink/80 font-light">
                 <li><Link to="/features/repository" className="hover:text-ink hover:translate-x-1 transition-transform inline-block">Repositories</Link></li>
-                <li><Link to="/features/docs" className="hover:text-ink hover:translate-x-1 transition-transform inline-block">Complete Documentation</Link></li>
+                <li><Link to="/features/docs" className="hover:text-ink hover:translate-x-1 transition-transform inline-block">AI Documentation</Link></li>
                 <li><Link to="/features/search" className="hover:text-ink hover:translate-x-1 transition-transform inline-block">Code Search</Link></li>
                 <li><Link to="/workflow" className="hover:text-ink hover:translate-x-1 transition-transform inline-block">Workflow</Link></li>
               </ul>
             </div>
-
+            
             <div>
               <h4 className="font-mono text-xs text-ink/40 uppercase tracking-widest mb-8">Resources</h4>
               <ul className="space-y-4 text-base text-ink/80 font-light">
@@ -131,7 +131,7 @@ export default function Layout() {
                 <li><a href="#" className="hover:text-ink hover:translate-x-1 transition-transform inline-block">Community</a></li>
               </ul>
             </div>
-
+            
             <div>
               <h4 className="font-mono text-xs text-ink/40 uppercase tracking-widest mb-8">Company</h4>
               <ul className="space-y-4 text-base text-ink/80 font-light">
@@ -142,7 +142,7 @@ export default function Layout() {
               </ul>
             </div>
           </div>
-
+          
           <div className="border-t border-ink/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-ink/40 font-mono">
             <p>&copy; {new Date().getFullYear()} Bitenst Systems. All rights reserved.</p>
             <div className="flex gap-8">

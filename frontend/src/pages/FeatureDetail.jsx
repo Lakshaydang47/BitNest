@@ -1,6 +1,9 @@
 import React from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { ArrowLeft, Search, Play } from 'lucide-react';
+import { 
+  ArrowLeft, Search, Play, Terminal, 
+  Database, Server, GitBranch, Shield, ArrowRight 
+} from 'lucide-react';
 import { features } from '../data/features';
 
 const AuthLayout = ({ feature }) => (
@@ -108,29 +111,6 @@ const VersionLayout = ({ feature }) => (
           <p className="text-2xl font-medium text-ink">{commit.msg}</p>
         </div>
       ))}
-    </div>
-  </div>
-);
-
-const DocsLayout = ({ feature }) => (
-  <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
-    <p className="font-mono text-xs uppercase tracking-widest text-ink/50 mb-6">Module 04</p>
-    <h1 className="text-6xl md:text-8xl font-medium tracking-tighter mb-8 leading-[0.9]">{feature.title}</h1>
-    <p className="text-2xl text-ink/60 font-light leading-relaxed mb-16 max-w-3xl mx-auto">{feature.fullDescription}</p>
-    
-    <div className="w-full h-96 mb-24 overflow-hidden border border-ink/10 relative">
-      <img 
-        src="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?q=80&w=2070&auto=format&fit=crop" 
-        alt="Documentation" 
-        className="object-cover w-full h-full grayscale hover:grayscale-0 transition-all duration-700"
-        referrerPolicy="no-referrer"
-      />
-    </div>
-
-    <div className="text-left border-t border-ink/10 pt-16 columns-1 md:columns-2 gap-16 text-ink/80 font-serif text-lg leading-relaxed">
-      <p className="mb-6"><span className="float-left text-6xl font-medium leading-none pr-4 pt-2">D</span>ocumentation generation is one of the strongest AI features. The system can inspect code structure and produce a readable explanation of the project. This helps new developers understand the project faster and reduces the burden of writing documentation manually.</p>
-      <p className="mb-6">By analyzing the abstract syntax tree and the commit history, the AI engine synthesizes a comprehensive overview of the architecture. It identifies key components, their responsibilities, and how they interact with each other.</p>
-      <p>This living document evolves alongside your codebase, ensuring that your team always has access to accurate, up-to-date technical references without the overhead of manual maintenance.</p>
     </div>
   </div>
 );
@@ -295,24 +275,248 @@ const DashboardLayout = ({ feature }) => (
   </div>
 );
 
+// --- THIS IS THE MASSIVE DOCUMENTATION LAYOUT WE CREATED ---
+const DocsLayout = ({ feature }) => (
+  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    {/* Header Section */}
+    <div className="text-center mb-24">
+      <p className="font-mono text-xs uppercase tracking-widest text-ink/50 mb-6">Official Documentation</p>
+      <h1 className="text-6xl md:text-8xl font-medium tracking-tighter mb-8 leading-[0.9]">System Manual</h1>
+      <p className="text-2xl text-ink/60 font-light leading-relaxed mb-16 max-w-4xl mx-auto">
+        A comprehensive, step-by-step guide to initializing, tracking, and synchronizing your codebase using our custom Node.js Version Control System.
+      </p>
+      
+      <div className="w-full h-[400px] overflow-hidden border border-ink/10 relative">
+        <img 
+          src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=2034&auto=format&fit=crop" 
+          alt="Server Architecture" 
+          className="object-cover w-full h-full grayscale hover:grayscale-0 transition-all duration-1000"
+          referrerPolicy="no-referrer"
+        />
+        <div className="absolute inset-0 bg-ink/10 mix-blend-multiply"></div>
+      </div>
+    </div>
+
+    {/* Table of Contents */}
+    <div className="bg-ink/5 border border-ink/10 p-8 mb-24">
+      <h3 className="font-mono text-sm font-bold uppercase tracking-widest text-ink mb-6 flex items-center gap-2">
+        <Terminal size={18} /> Quick Navigation
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 font-mono text-sm text-ink/70">
+        <a href="#step-1" className="hover:text-indigo-600 transition-colors">01. Booting the Server</a>
+        <a href="#step-2" className="hover:text-indigo-600 transition-colors">02. Initializing Repo</a>
+        <a href="#step-3" className="hover:text-indigo-600 transition-colors">03. Staging Files</a>
+        <a href="#step-4" className="hover:text-indigo-600 transition-colors">04. Committing</a>
+        <a href="#step-5" className="hover:text-indigo-600 transition-colors">05. Pushing to Remote</a>
+        <a href="#step-6" className="hover:text-indigo-600 transition-colors">06. Pulling Changes</a>
+        <a href="#step-7" className="hover:text-indigo-600 transition-colors">07. Reverting States</a>
+      </div>
+    </div>
+
+    {/* Step 1: Server */}
+    <div id="step-1" className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-32 items-start border-l border-ink/20 pl-8 lg:pl-12 relative">
+      <div className="absolute -left-3 top-0 w-6 h-6 bg-paper border-4 border-ink rounded-full"></div>
+      <div className="lg:col-span-5">
+        <div className="flex items-center gap-3 mb-4">
+          <Server className="text-indigo-600" size={24} />
+          <h2 className="text-3xl font-medium tracking-tight">Step 01: Boot Server</h2>
+        </div>
+        <p className="text-ink/70 leading-relaxed mb-6 font-light text-lg">
+          Before performing any remote operations (push, pull), the central Express server must be online. This server connects to MongoDB and opens Socket.io channels for real-time collaboration.
+        </p>
+        <ul className="space-y-3 font-mono text-sm text-ink/60 mb-6">
+          <li className="flex items-center gap-2"><ArrowRight size={14}/> Requires <span className="text-ink font-bold">.env</span> with MONGO_DB URI</li>
+          <li className="flex items-center gap-2"><ArrowRight size={14}/> Runs on default PORT 3000</li>
+          <li className="flex items-center gap-2"><ArrowRight size={14}/> Accepts Socket connections on "joinRoom"</li>
+        </ul>
+      </div>
+      <div className="lg:col-span-7 bg-slate-900 rounded-xl p-6 shadow-xl border border-slate-800">
+        <div className="flex gap-2 mb-4 border-b border-slate-800 pb-4">
+          <div className="w-3 h-3 rounded-full bg-red-500"></div>
+          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+          <div className="w-3 h-3 rounded-full bg-green-500"></div>
+        </div>
+        <pre className="font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">
+<span className="text-emerald-400">$</span> node server.js start
+<span className="text-slate-500"># OR if using the CLI tool directly:</span>
+<span className="text-emerald-400">$</span> node server.js start
+
+<span className="text-blue-400">[INFO]</span> Booting Express API...
+<span className="text-blue-400">[INFO]</span> Attempting database connection...
+<span className="text-green-400">[SUCCESS]</span> MongoDB connected!
+<span className="text-green-400">[SUCCESS]</span> CRUD operations called
+<span className="text-green-400">[SUCCESS]</span> Server is running on PORT 3000
+        </pre>
+      </div>
+    </div>
+
+    {/* Step 2: Init */}
+    <div id="step-2" className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-32 items-start border-l border-ink/20 pl-8 lg:pl-12 relative">
+      <div className="absolute -left-3 top-0 w-6 h-6 bg-paper border-4 border-ink rounded-full"></div>
+      <div className="lg:col-span-5">
+        <div className="flex items-center gap-3 mb-4">
+          <Database className="text-indigo-600" size={24} />
+          <h2 className="text-3xl font-medium tracking-tight">Step 02: Init Repo</h2>
+        </div>
+        <p className="text-ink/70 leading-relaxed mb-6 font-light text-lg">
+          Initialize a brand new local repository in your current working directory. This creates the hidden tracking folders required to monitor your file changes.
+        </p>
+      </div>
+      <div className="lg:col-span-7 bg-slate-900 rounded-xl p-6 shadow-xl border border-slate-800">
+        <pre className="font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">
+<span className="text-emerald-400">$</span> node server.js init
+
+<span className="text-slate-500"># System Output:</span>
+Initialized empty local repository in /current/path/.repo
+        </pre>
+      </div>
+    </div>
+
+    {/* Step 3: Add */}
+    <div id="step-3" className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-32 items-start border-l border-ink/20 pl-8 lg:pl-12 relative">
+      <div className="absolute -left-3 top-0 w-6 h-6 bg-paper border-4 border-ink rounded-full"></div>
+      <div className="lg:col-span-5">
+        <div className="flex items-center gap-3 mb-4">
+          <Shield className="text-indigo-600" size={24} />
+          <h2 className="text-3xl font-medium tracking-tight">Step 03: Add Files</h2>
+        </div>
+        <p className="text-ink/70 leading-relaxed font-light text-lg">
+          Move your created or modified files into the staging area. The <span className="font-mono text-sm bg-ink/10 px-1 py-0.5 rounded">add &lt;file&gt;</span> command calculates changes and prepares the file blobs to be committed to the tree.
+        </p>
+      </div>
+      <div className="lg:col-span-7 bg-slate-900 rounded-xl p-6 shadow-xl border border-slate-800">
+        <pre className="font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">
+<span className="text-emerald-400">$</span> node server.js add index.js
+<span className="text-emerald-400">$</span> node server.js add package.json
+
+<span className="text-slate-500"># System Output:</span>
+Added index.js to staging area.
+Added package.json to staging area.
+        </pre>
+      </div>
+    </div>
+
+    {/* Step 4: Commit */}
+    <div id="step-4" className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-32 items-start border-l border-ink/20 pl-8 lg:pl-12 relative">
+      <div className="absolute -left-3 top-0 w-6 h-6 bg-paper border-4 border-ink rounded-full"></div>
+      <div className="lg:col-span-5">
+        <div className="flex items-center gap-3 mb-4">
+          <GitBranch className="text-indigo-600" size={24} />
+          <h2 className="text-3xl font-medium tracking-tight">Step 04: Commit</h2>
+        </div>
+        <p className="text-ink/70 leading-relaxed font-light text-lg">
+          Take a permanent snapshot of the staging area. This generates a unique <span className="font-mono text-sm text-indigo-600">commitId</span> that you can later use to push to the cloud or revert your local environment.
+        </p>
+      </div>
+      <div className="lg:col-span-7 bg-slate-900 rounded-xl p-6 shadow-xl border border-slate-800">
+        <pre className="font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">
+<span className="text-emerald-400">$</span> node server.js commit "Initial project setup"
+
+<span className="text-slate-500"># System Output:</span>
+[main <span className="text-yellow-400">a1b2c3d</span>] Initial project setup
+ 2 files changed, 45 insertions(+)
+        </pre>
+      </div>
+    </div>
+
+    {/* Step 5: Push */}
+    <div id="step-5" className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-32 items-start border-l border-ink/20 pl-8 lg:pl-12 relative">
+      <div className="absolute -left-3 top-0 w-6 h-6 bg-paper border-4 border-ink rounded-full"></div>
+      <div className="lg:col-span-5">
+        <div className="flex items-center gap-3 mb-4">
+          <ArrowRight className="text-indigo-600 rotate-[-45deg]" size={24} />
+          <h2 className="text-3xl font-medium tracking-tight">Step 05: Push Remote</h2>
+        </div>
+        <p className="text-ink/70 leading-relaxed font-light text-lg">
+          Upload your local commits to the MongoDB server. You must provide the specific <span className="font-mono text-sm bg-ink/10 px-1 py-0.5 rounded">commitId</span> you wish to push. The Express router handles the binary transfer.
+        </p>
+      </div>
+      <div className="lg:col-span-7 bg-slate-900 rounded-xl p-6 shadow-xl border border-slate-800">
+        <pre className="font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">
+<span className="text-emerald-400">$</span> node server.js push a1b2c3d
+
+<span className="text-slate-500"># System Output:</span>
+Connecting to http://localhost:3000...
+Uploading objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 1.2 KiB | 1.20 MiB/s, done.
+<span className="text-green-400">Successfully pushed commit a1b2c3d to remote database.</span>
+        </pre>
+      </div>
+    </div>
+
+    {/* Step 6: Pull */}
+    <div id="step-6" className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-32 items-start border-l border-ink/20 pl-8 lg:pl-12 relative">
+      <div className="absolute -left-3 top-0 w-6 h-6 bg-paper border-4 border-ink rounded-full"></div>
+      <div className="lg:col-span-5">
+        <div className="flex items-center gap-3 mb-4">
+          <ArrowRight className="text-indigo-600 rotate-[135deg]" size={24} />
+          <h2 className="text-3xl font-medium tracking-tight">Step 06: Pull Changes</h2>
+        </div>
+        <p className="text-ink/70 leading-relaxed font-light text-lg">
+          Fetch the latest state from the remote database and merge it into your local directory. Useful when collaborating with a team or switching machines.
+        </p>
+      </div>
+      <div className="lg:col-span-7 bg-slate-900 rounded-xl p-6 shadow-xl border border-slate-800">
+        <pre className="font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">
+<span className="text-emerald-400">$</span> node server.js pull
+
+<span className="text-slate-500"># System Output:</span>
+Fetching from remote...
+Updating current workspace...
+Fast-forward
+ src/main.js | 15 <span className="text-green-400">++++++++</span><span className="text-red-400">---</span>
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+        </pre>
+      </div>
+    </div>
+
+    {/* Step 7: Revert */}
+    <div id="step-7" className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-16 items-start border-l border-ink/20 pl-8 lg:pl-12 relative">
+      <div className="absolute -left-3 top-0 w-6 h-6 bg-paper border-4 border-ink rounded-full"></div>
+      <div className="lg:col-span-5">
+        <div className="flex items-center gap-3 mb-4">
+          <Play className="text-red-500 rotate-180" size={24} />
+          <h2 className="text-3xl font-medium tracking-tight">Step 07: Revert</h2>
+        </div>
+        <p className="text-ink/70 leading-relaxed font-light text-lg">
+          Made a mistake? Time travel back to a previous, stable state by passing the target <span className="font-mono text-sm bg-ink/10 px-1 py-0.5 rounded">commitID</span>.
+        </p>
+      </div>
+      <div className="lg:col-span-7 bg-slate-900 rounded-xl p-6 shadow-xl border border-slate-800">
+        <pre className="font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">
+<span className="text-emerald-400">$</span> node server.js revert a1b2c3d
+
+<span className="text-slate-500"># System Output:</span>
+<span className="text-yellow-400">HEAD is now at a1b2c3d Initial project setup.</span>
+Workspace reverted successfully. 
+Unstaged changes have been discarded.
+        </pre>
+      </div>
+    </div>
+
+  </div>
+);
+
+// --- MAIN COMPONENT ---
 export default function FeatureDetail() {
   const { id } = useParams();
-  const feature = features.find(f => f.id === id);
-
-  if (!feature) {
-    return <Navigate to="/" replace />;
-  }
+  
+  // Safe fallback if the feature ID doesn't exist in your features.js data
+  const feature = features?.find(f => f.id === id) || { 
+    title: "System Documentation", 
+    fullDescription: "Viewing technical specifications." 
+  };
 
   const renderLayout = () => {
     switch(id) {
       case 'auth': return <AuthLayout feature={feature} />;
       case 'repository': return <RepoLayout feature={feature} />;
       case 'version-control': return <VersionLayout feature={feature} />;
-      case 'docs': return <DocsLayout feature={feature} />;
       case 'search': return <SearchLayout feature={feature} />;
       case 'commits': return <CommitsLayout feature={feature} />;
       case 'meetings': return <MeetingsLayout feature={feature} />;
       case 'dashboard': return <DashboardLayout feature={feature} />;
+      case 'docs': return <DocsLayout feature={feature} />;
       default: return <DocsLayout feature={feature} />;
     }
   };
@@ -320,12 +524,11 @@ export default function FeatureDetail() {
   return (
     <div className="min-h-screen bg-paper">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm text-ink/50 hover:text-ink transition-colors font-mono uppercase tracking-widest">
-          <ArrowLeft size={16} /> Back to Index
+        <Link to="/cli-guide" className="inline-flex items-center gap-2 text-sm text-ink/50 hover:text-ink transition-colors font-mono uppercase tracking-widest">
+          <ArrowLeft size={16} /> Back to How to Install
         </Link>
       </div>
       {renderLayout()}
     </div>
   );
 }
-

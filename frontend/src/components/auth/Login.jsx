@@ -20,7 +20,7 @@ export default function Login() {
 
     try {
       // Logic from your second snippet
-      const res = await axios.post("http://localhost:3002/login", {
+      const res = await axios.post("https://backend-szu2.onrender.com/login", {
         email: email,
         password: password,
       });
@@ -31,9 +31,9 @@ export default function Login() {
 
       // Updating context
       setCurrentUser(res.data.userId);
-      
+
       // Navigate to dashboard/home
-      navigate('/dashboard'); 
+      navigate('/dashboard');
     } catch (err) {
       console.error(err);
       setError("Login Failed! Please check your credentials.");
@@ -56,7 +56,7 @@ export default function Login() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-sm border border-ink/10 sm:rounded-sm sm:px-10">
-          
+
           {/* Error Alert */}
           {error && (
             <div className="mb-4 p-2 text-sm text-red-600 bg-red-50 border border-red-100 rounded-sm">

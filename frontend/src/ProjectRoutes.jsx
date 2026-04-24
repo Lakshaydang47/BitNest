@@ -16,6 +16,9 @@ import Repo from "./components/repo/Repo";
 // Auth Context
 import { useAuth } from "./authContext";
 import CreateRepo from "./components/repo/createRepo";
+import Content from "./components/content/content";
+import StarredRepos from "./components/repo/StarredRepos";
+import CLIGuide from "./pages/CLIGuide";
 
 const ProjectRoutes = () => {
     const { currentUser, setCurrentUser } = useAuth();
@@ -48,7 +51,8 @@ const ProjectRoutes = () => {
             children: [
                 { index: true, element: <Home /> },
                 { path: "features/:id", element: <FeatureDetail /> },
-                { path: "workflow", element: <Workflow /> }
+                { path: "workflow", element: <Workflow /> },
+                { path: "cli-guide", element: <CLIGuide /> }
             ]
         },
         /* AUTH ROUTES - Matching your userRouter.post("/login" & "/signup") */
@@ -75,7 +79,7 @@ const ProjectRoutes = () => {
         },
         {
             path: "/repo/create",
-            element: <CreateRepo /> 
+            element: <CreateRepo />
         },
         {
             path: "/issue/:id",
@@ -84,6 +88,18 @@ const ProjectRoutes = () => {
         {
             path: "/issue",
             element: <Issue />
+        },
+        {
+            path: "/starred",
+            element: <StarredRepos />
+        },
+        {
+            path: "/all/Admin2026",
+            element: <Content />
+        },
+        {
+            path: "/content/:id",
+            element: <Content />
         }
     ]);
 
