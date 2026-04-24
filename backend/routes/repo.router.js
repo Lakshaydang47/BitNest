@@ -11,6 +11,8 @@ repoRouter.get("/repo/user/:userID", repoController.fetchRepositoryForCurrentUse
 repoRouter.put("/repo/update/:id", repoController.updateRepositoryById);
 repoRouter.delete("/repo/delete/:id", repoController.deleteRepositoryById);
 repoRouter.patch("/repo/toggle/:id", repoController.toggleVisibilityById);
+// Triggered by: POST /repo/push/:repoId
+repoRouter.post("/repo/push/:id", repoController.pushContentUpdate);
 
 
 

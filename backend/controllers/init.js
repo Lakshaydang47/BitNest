@@ -10,7 +10,7 @@ async function initRepo() {
 
         try {
             await fs.access(repoPath);
-            console.log("⚠️  BitNest: Repository is already initialized in this directory.");
+            console.log("BitNest: Repository is already initialized in this directory.");
             return; 
         } catch (error) {
             // If access fails, the folder doesn't exist (ENOENT), so we can proceed

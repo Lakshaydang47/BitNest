@@ -12,11 +12,13 @@ const RepositorySchema = new Schema({
   },
   content: [
     {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "Content",
     },
   ],
   visibility: {
     type: Boolean,
+    default: true,
   },
   owner: {
     type: Schema.Types.ObjectId,
@@ -29,7 +31,19 @@ const RepositorySchema = new Schema({
       ref: "Issue",
     },
   ],
-});
+  stars: {
+    type: Number,
+    default: 0,
+  },
+  stagedFiles: {
+    type: [String],
+    default: [],
+  },
+  initialized: {
+    type: Boolean,
+    default: false,
+  },
+}, { timestamps: true });
 
 const Repository = mongoose.model("Repository", RepositorySchema);
 module.exports = Repository;

@@ -1,10 +1,11 @@
+#!/usr/bin/env node
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const http = require("http");
-const {Server} = require("socket.io");
+const { Server } = require("socket.io");
 const mainRouter = require('./routes/main.router');
 
 const yargs = require('yargs');
@@ -20,7 +21,8 @@ const { revertRepo } = require("./controllers/revert");
 dotenv.config();
 
 yargs(hideBin(process.argv))
-.command(
+    .scriptName("bitnest")
+    .command(
         "start",
         "Starts a new server",
         {},
@@ -29,7 +31,7 @@ yargs(hideBin(process.argv))
         "init",
         "Initialize a new repository",
         {},
-        initRepo). 
+        () => initRepo().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); })). 
     command(
         "add <file>",
         "Add a file to the repository",
@@ -40,33 +42,43 @@ yargs(hideBin(process.argv))
             });
         },
         (argv) => {
-            addRepo(argv.file);
+            addRepo(argv.file).then(() => process.exit(0)).catch(() => process.exit(1));
         }).
     command(
         "commit <message>",
         "Commit the stagged file",
         (yargs) => {
             yargs.positional(
-                "message" , {
-                    describe: "Commit message",
-                    type: "string"
-                }
+                "message", {
+                describe: "Commit message",
+                type: "string"
+            }
             );
         },
         (argv) => {
-            commitRepo(argv.message);
+            commitRepo(argv.message).then(() => process.exit(0)).catch(() => process.exit(1));
         }
     ).
     command(
         "push",
         "Push changes to remote repository",
-        {},
-        pushRepo).
+        (yargs) => {
+            yargs.option(
+                "repoId", {
+                describe: "Repository ID in MongoDB to sync with",
+                type: "string",
+                demandOption: true
+            }
+            );
+        },
+        (argv) => {
+            pushRepo(argv.repoId).then(() => process.exit(0)).catch(() => process.exit(1));
+        }).
     command(
         "pull",
         "Pull changes from remote repository",
         {},
-        pullRepo).
+        () => pullRepo().then(() => process.exit(0)).catch(() => process.exit(1))).
     command(
         "revert <commitID>",
         "Revert to a specific commit",
@@ -77,55 +89,55 @@ yargs(hideBin(process.argv))
             });
         },
         (argv) => {
-            revertRepo(argv.commitID);
+            revertRepo(argv.commitID).then(() => process.exit(0)).catch(() => process.exit(1));
         }).
     demandCommand(1, "You need to specify a command").help().argv;
 
-function startServer(){
-     const app = express();
-  const port = process.env.PORT || 3000;
+function startServer() {
+    const app = express();
+    const port = process.env.PORT || 3000;
 
-  app.use(bodyParser.json());
-  app.use(express.json());
+    app.use(bodyParser.json());
+    app.use(express.json());
 
-  const mongoURI = process.env.MONGO_DB;
+    const mongoURI = process.env.MONGO_DB;
 
-  mongoose
-    .connect(mongoURI)
-    .then(() => console.log("MongoDB connected!"))
-    .catch((err) => console.error("Unable to connect : ", err));
+    mongoose
+        .connect(mongoURI)
+        .then(() => console.log("MongoDB connected!"))
+        .catch((err) => console.error("Unable to connect : ", err));
 
-  app.use(cors({ origin: "*" }));
+    app.use(cors({ origin: "*" }));
 
-  app.use("/", mainRouter);
+    app.use("/", mainRouter);
 
-  let user = "test";
-  const httpServer = http.createServer(app);
-  const io = new Server(httpServer, {
-    cors: {
-      origin: "*",
-      methods: ["GET", "POST"],
-    },
-  });
-
-  io.on("connection", (socket) => {
-    socket.on("joinRoom", (userID) => {
-      user = userID;
-      console.log("=====");
-      console.log(user);
-      console.log("=====");
-      socket.join(userID);
+    let user = "test";
+    const httpServer = http.createServer(app);
+    const io = new Server(httpServer, {
+        cors: {
+            origin: "*",
+            methods: ["GET", "POST"],
+        },
     });
-  });
 
-  const db = mongoose.connection;
+    io.on("connection", (socket) => {
+        socket.on("joinRoom", (userID) => {
+            user = userID;
+            console.log("=====");
+            console.log(user);
+            console.log("=====");
+            socket.join(userID);
+        });
+    });
 
-  db.once("open", async () => {
-    console.log("CRUD operations called");
-    // CRUD operations
-  });
+    const db = mongoose.connection;
 
-  httpServer.listen(port, () => {
-    console.log(`Server is running on PORT ${port}`);
-  });
+    db.once("open", async () => {
+        console.log("CRUD operations called");
+        // CRUD operations
+    });
+
+    httpServer.listen(port, () => {
+        console.log(`Server is running on PORT ${port}`);
+    });
 }

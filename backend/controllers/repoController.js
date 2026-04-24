@@ -2,26 +2,45 @@ const mongoose = require("mongoose");
 const Repository = require("../models/repoModel");
 const User = require("../models/userModel");
 const Issue = require("../models/issueModel");
+const Content = require("../models/contentModel");
+const { pushRepo } = require("./push");
+
+async function pushContentUpdate(req, res) {
+  try {
+        const { id } = req.params;
+        await pushRepo(id); // Calling the utility above
+        res.json({ message: "Push successful! Timeline updated." });
+    } catch (err) {
+        res.status(500).json({ error: "Push failed", details: err.message });
+    }
+}
 
 async function createRepository(req, res) {
-  const { owner, name, issues, content, description, visibility } = req.body;
+  const { owner, name, description, visibility, initialCommitId } = req.body;
 
   try {
-    if (!name) {
-      return res.status(400).json({ error: "Repository name is required!" });
+    let initialContentId = null;
+
+    // 1. If the user provided a commit ID string, create a DB entry for it
+    if (initialCommitId) {
+      const newContent = new Content({
+        commitId: initialCommitId,
+        message: "Initial commit", // Default message for creation
+        date: new Date().toISOString(),
+        files: [] // Empty for now until a 'push' happens
+      });
+      const savedContent = await newContent.save();
+      initialContentId = savedContent._id;
     }
 
-    if (!mongoose.Types.ObjectId.isValid(owner)) {
-      return res.status(400).json({ error: "Invalid User ID!" });
-    }
-
+    // 2. Create the repository with the linked Content ID
     const newRepository = new Repository({
       name,
       description,
       visibility,
       owner,
-      content,
-      issues,
+      content: initialContentId ? [initialContentId] : [], // Store as an array of IDs
+      issues: [],
     });
 
     const result = await newRepository.save();
@@ -31,7 +50,7 @@ async function createRepository(req, res) {
       repositoryID: result._id,
     });
   } catch (err) {
-    console.error("Error during repository creation : ", err.message);
+    console.error("Error during repository creation:", err.message);
     res.status(500).send("Server error");
   }
 }
@@ -54,8 +73,10 @@ async function fetchRepositoryById(req, res) {
   try {
     const repository = await Repository.find({ _id: id })
       .populate("owner")
-      .populate("issues");
+      .populate("issues")
+      .populate("content");
 
+      if (!repository || repository.length === 0) return res.status(404).json({ error: "Repository not found" });
     res.json(repository);
   } catch (err) {
     console.error("Error during fetching repository : ", err.message);
@@ -159,6 +180,7 @@ async function deleteRepositoryById(req, res) {
 }
 
 module.exports = {
+    pushContentUpdate,
     createRepository,
     getAllRepositories,
     fetchRepositoryById,

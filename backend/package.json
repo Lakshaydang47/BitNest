@@ -2,8 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
+  "bin": {
+    "bitnest": "server.js"
+  },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js start"
   },
   "keywords": [],
   "author": "Lakshay Dang",
