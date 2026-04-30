@@ -18,7 +18,7 @@ export default function Layout() {
           <div className="flex justify-between items-center h-20">
             <Link to="/" className="font-medium tracking-tight text-2xl text-ink flex items-center gap-3">
               <div className="w-8 h-8 bg-ink text-paper flex items-center justify-center text-sm font-bold rounded-sm">B</div>
-              Bitenst.
+              BitNest.
             </Link>
 
             <nav className="hidden md:flex items-center gap-8">
