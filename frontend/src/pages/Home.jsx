@@ -14,7 +14,7 @@ export default function Home() {
             The structured <br className="hidden md:block" /> codebase platform.
           </h1>
           <p className="text-xl md:text-2xl text-ink/60 max-w-2xl font-light leading-relaxed mb-12">
-            Bitenst combines robust version control with automatic documentation, commit summaries, and meeting transcriptions. Built for professional engineering teams.
+            Bitnest combines robust version control with automatic documentation, commit summaries, and meeting transcriptions. Built for professional engineering teams.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
